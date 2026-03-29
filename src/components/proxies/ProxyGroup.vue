@@ -22,9 +22,7 @@
         <div class="flex min-w-0 flex-1 flex-col gap-1">
           <div class="flex min-w-0 items-center gap-1">
             <div class="flex min-w-0 flex-1 items-center gap-1">
-              <span
-                class="shrink-0 text-base"
-              >
+              <span class="shrink-0 text-base">
                 {{ name }}
               </span>
               <button
@@ -53,7 +51,7 @@
               />
             </button>
           </div>
-          <div class="text-base-content/80 flex w-full items-center">
+          <div class="text-base-content/80 flex w-full items-center pt-0.5 pb-1.5">
             <div class="min-w-0 flex-1 pr-3 text-sm">
               <ProxyGroupNow :name="name" />
             </div>
@@ -84,9 +82,7 @@
               :size="proxyGroupIconSize"
               :margin="proxyGroupIconMargin"
             />
-            <span
-              class=""
-            >
+            <span class="">
               {{ name }}
             </span>
           </div>
@@ -125,7 +121,7 @@
       </div>
       <div
         v-if="!useLargeProxyGroupIcon"
-        class="text-base-content/80 mt-1.5 flex items-start gap-2"
+        class="text-base-content/80 mt-1.5 mb-1 flex items-start gap-2"
       >
         <div class="min-w-0 flex-1 text-sm">
           <ProxyGroupNow :name="name" />
@@ -201,9 +197,9 @@ import CollapseCard from '../common/CollapseCard.vue'
 import LatencyTag from './LatencyTag.vue'
 import ProxiesByProvider from './ProxiesByProvider.vue'
 import ProxiesContent from './ProxiesContent.vue'
-import ProxyPenetrationSection from './ProxyPenetrationSection.vue'
 import ProxyGroupNow from './ProxyGroupNow.vue'
 import ProxyIcon from './ProxyIcon.vue'
+import ProxyPenetrationSection from './ProxyPenetrationSection.vue'
 import ProxyPreview from './ProxyPreview.vue'
 
 const props = defineProps<{

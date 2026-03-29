@@ -1,188 +1,196 @@
 <template>
-  <div
-    ref="parentRef"
-    class="h-full overflow-auto p-2"
-    :class="{
-      'select-none': isDragging,
-    }"
-    @touchstart.passive.stop
-    @touchmove.passive.stop
-    @touchend.passive.stop
-    @mousedown="handleMouseDown"
-    @mousemove="handleMouseMove"
-    @mouseup="handleMouseUp"
-    @mouseleave="handleMouseUp"
-  >
-    <div :style="{ height: `${totalSize}px` }">
-      <table
-        :class="['table rounded-none', sizeOfTable, isManualTable && 'table-fixed']"
-        :style="
-          isManualTable && {
-            width: `${tanstackTable.getCenterTotalSize()}px`,
-          }
-        "
+  <div class="app-card-padding flex min-h-0 flex-1">
+    <div
+      class="connection-table-shell border-base-300/60 bg-base-100 flex min-h-0 flex-1 overflow-hidden rounded-lg border"
+    >
+      <div
+        ref="parentRef"
+        class="connection-table-scroll min-h-0 flex-1 overflow-auto overscroll-contain"
+        :class="{
+          'select-none': isDragging,
+        }"
+        @touchstart.passive.stop
+        @touchmove.passive.stop
+        @touchend.passive.stop
+        @mousedown="handleMouseDown"
+        @mousemove="handleMouseMove"
+        @mouseup="handleMouseUp"
+        @mouseleave="handleMouseUp"
       >
-        <thead class="bg-base-100 sticky -top-2 z-10">
-          <tr
-            v-for="headerGroup in tanstackTable.getHeaderGroups()"
-            :key="headerGroup.id"
+        <div :style="{ height: `${totalSize}px` }">
+          <table
+            :class="['table rounded-none', sizeOfTable, isManualTable && 'table-fixed']"
+            :style="
+              isManualTable && {
+                width: `${tanstackTable.getCenterTotalSize()}px`,
+              }
+            "
           >
-            <th
-              v-for="header in headerGroup.headers"
-              :key="header.id"
-              :colSpan="header.colSpan"
-              class="relative"
-              :class="[
-                header.column.getCanSort() ? 'cursor-pointer select-none' : '',
-                header.column.getIsPinned && header.column.getIsPinned() === 'left'
-                  ? 'pinned-td bg-base-100 sticky -left-2 z-20'
-                  : '',
-              ]"
-              :style="
-                isManualTable && {
-                  width: `${header.getSize()}px`,
-                }
-              "
-              @click="header.column.getToggleSortingHandler()?.($event)"
-            >
-              <div class="flex items-center gap-1">
-                <FlexRender
-                  v-if="!header.isPlaceholder"
-                  :render="header.column.columnDef.header"
-                  :props="header.getContext()"
+            <thead class="bg-base-100 sticky top-0 z-10">
+              <tr
+                v-for="headerGroup in tanstackTable.getHeaderGroups()"
+                :key="headerGroup.id"
+              >
+                <th
+                  v-for="header in headerGroup.headers"
+                  :key="header.id"
+                  :colSpan="header.colSpan"
+                  class="relative"
+                  :class="[
+                    header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+                    header.column.getIsPinned && header.column.getIsPinned() === 'left'
+                      ? 'pinned-td bg-base-100 sticky left-0 z-20'
+                      : '',
+                  ]"
+                  :style="
+                    isManualTable && {
+                      width: `${header.getSize()}px`,
+                    }
+                  "
+                  @click="header.column.getToggleSortingHandler()?.($event)"
                 >
-                </FlexRender>
-                <ArrowUpCircleIcon
-                  class="h-4 w-4"
-                  v-if="header.column.getIsSorted() === 'asc'"
-                />
-                <ArrowDownCircleIcon
-                  class="h-4 w-4"
-                  v-if="header.column.getIsSorted() === 'desc'"
-                />
-                <div>
-                  <button
-                    v-if="header.column.getCanGroup()"
-                    class="btn btn-xs btn-circle btn-ghost"
-                    @click.stop="() => header.column.getToggleGroupingHandler()()"
-                  >
-                    <MagnifyingGlassMinusIcon
-                      v-if="header.column.getIsGrouped()"
-                      class="h-4 w-4"
-                    />
-                    <MagnifyingGlassPlusIcon
-                      v-else
-                      class="h-4 w-4"
-                    />
-                  </button>
-                  <button
-                    v-if="
-                      header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.Host ||
-                      header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.SniffHost
-                    "
-                    class="btn btn-xs btn-circle btn-ghost"
-                    @click.stop="() => handlePinColumn(header.column)"
-                  >
-                    <MapPinIcon
-                      v-if="header.column.getIsPinned() !== 'left'"
-                      class="h-4 w-4"
-                    />
-                    <XMarkIcon
-                      v-else
-                      class="h-4 w-4"
-                    />
-                  </button>
-                </div>
-              </div>
-              <div
-                v-if="isManualTable"
-                @dblclick="() => header.column.resetSize()"
-                @click.stop
-                @mousedown.stop="(e) => header.getResizeHandler()(e)"
-                @touchstart.stop="(e) => header.getResizeHandler()(e)"
-                class="resizer bg-neutral absolute top-0 right-0 h-full w-1 cursor-ew-resize"
-              />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(virtualRow, index) in virtualRows"
-            :key="virtualRow.key.toString()"
-            :style="{
-              height: `${virtualRow.size}px`,
-              transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
-            }"
-            class="hover:bg-primary! hover:text-primary-content"
-            :class="[
-              index % 2 === 0 ? 'bg-base-100' : 'bg-base-200',
-              !isDragging ? 'cursor-pointer' : 'cursor-grabbing',
-            ]"
-            @click="handlerClickRow(rows[virtualRow.index])"
-          >
-            <td
-              v-for="cell in rows[virtualRow.index].getVisibleCells()"
-              :key="cell.id"
-              :class="[
-                isManualTable
-                  ? 'truncate text-sm'
-                  : twMerge(
-                      'text-sm whitespace-nowrap',
-                      [
-                        CONNECTIONS_TABLE_ACCESSOR_KEY.Download,
-                        CONNECTIONS_TABLE_ACCESSOR_KEY.DlSpeed,
-                        CONNECTIONS_TABLE_ACCESSOR_KEY.Upload,
-                        CONNECTIONS_TABLE_ACCESSOR_KEY.UlSpeed,
-                      ].includes(cell.column.id as CONNECTIONS_TABLE_ACCESSOR_KEY) && 'min-w-20',
-                      CONNECTIONS_TABLE_ACCESSOR_KEY.Host ===
-                        (cell.column.id as CONNECTIONS_TABLE_ACCESSOR_KEY) && 'max-w-xs truncate',
-                      [
-                        CONNECTIONS_TABLE_ACCESSOR_KEY.Chains,
-                        CONNECTIONS_TABLE_ACCESSOR_KEY.Rule,
-                      ].includes(cell.column.id as CONNECTIONS_TABLE_ACCESSOR_KEY) &&
-                        'max-w-xl truncate',
-                    ),
-                cell.column.getIsPinned && cell.column.getIsPinned() === 'left'
-                   ? 'pinned-td sticky -left-2 z-20 bg-inherit'
-                  : '',
-              ]"
-              @contextmenu="handleCellRightClick($event, cell)"
-            >
-              <template v-if="cell.column.getIsGrouped()">
-                <template v-if="rows[virtualRow.index].getCanExpand()">
-                  <div class="flex items-center overflow-hidden">
-                    <component
-                      :is="
-                        rows[virtualRow.index].getIsExpanded()
-                          ? MagnifyingGlassMinusIcon
-                          : MagnifyingGlassPlusIcon
-                      "
-                      class="mr-1 inline-block h-4 w-4 shrink-0"
-                    />
+                  <div class="flex items-center gap-1">
                     <FlexRender
-                      :render="cell.column.columnDef.cell"
-                      :props="cell.getContext()"
-                      class="shrink-1 overflow-hidden"
+                      v-if="!header.isPlaceholder"
+                      :render="header.column.columnDef.header"
+                      :props="header.getContext()"
+                    >
+                    </FlexRender>
+                    <ArrowUpCircleIcon
+                      class="h-4 w-4"
+                      v-if="header.column.getIsSorted() === 'asc'"
                     />
-                    <span class="ml-1 shrink-0">
-                      ({{ rows[virtualRow.index].subRows.length }})
-                    </span>
+                    <ArrowDownCircleIcon
+                      class="h-4 w-4"
+                      v-if="header.column.getIsSorted() === 'desc'"
+                    />
+                    <div>
+                      <button
+                        v-if="header.column.getCanGroup()"
+                        class="btn btn-xs btn-circle btn-ghost"
+                        @click.stop="() => header.column.getToggleGroupingHandler()()"
+                      >
+                        <MagnifyingGlassMinusIcon
+                          v-if="header.column.getIsGrouped()"
+                          class="h-4 w-4"
+                        />
+                        <MagnifyingGlassPlusIcon
+                          v-else
+                          class="h-4 w-4"
+                        />
+                      </button>
+                      <button
+                        v-if="
+                          header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.Host ||
+                          header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.SniffHost
+                        "
+                        class="btn btn-xs btn-circle btn-ghost"
+                        @click.stop="() => handlePinColumn(header.column)"
+                      >
+                        <MapPinIcon
+                          v-if="header.column.getIsPinned() !== 'left'"
+                          class="h-4 w-4"
+                        />
+                        <XMarkIcon
+                          v-else
+                          class="h-4 w-4"
+                        />
+                      </button>
+                    </div>
                   </div>
-                </template>
-              </template>
-              <FlexRender
-                v-else
-                :render="
-                  cell.getIsAggregated()
-                    ? cell.column.columnDef.aggregatedCell
-                    : cell.column.columnDef.cell
-                "
-                :props="cell.getContext()"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  <div
+                    v-if="isManualTable"
+                    @dblclick="() => header.column.resetSize()"
+                    @click.stop
+                    @mousedown.stop="(e) => header.getResizeHandler()(e)"
+                    @touchstart.stop="(e) => header.getResizeHandler()(e)"
+                    class="resizer bg-neutral absolute top-0 right-0 h-full w-1 cursor-ew-resize"
+                  />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(virtualRow, index) in virtualRows"
+                :key="virtualRow.key.toString()"
+                :style="{
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
+                }"
+                class="hover:bg-primary! hover:text-primary-content"
+                :class="[
+                  index % 2 === 0 ? 'bg-base-100' : 'bg-base-200',
+                  !isDragging ? 'cursor-pointer' : 'cursor-grabbing',
+                ]"
+                @click="handlerClickRow(rows[virtualRow.index])"
+              >
+                <td
+                  v-for="cell in rows[virtualRow.index].getVisibleCells()"
+                  :key="cell.id"
+                  :class="[
+                    isManualTable
+                      ? 'truncate text-sm'
+                      : twMerge(
+                          'text-sm whitespace-nowrap',
+                          [
+                            CONNECTIONS_TABLE_ACCESSOR_KEY.Download,
+                            CONNECTIONS_TABLE_ACCESSOR_KEY.DlSpeed,
+                            CONNECTIONS_TABLE_ACCESSOR_KEY.Upload,
+                            CONNECTIONS_TABLE_ACCESSOR_KEY.UlSpeed,
+                          ].includes(cell.column.id as CONNECTIONS_TABLE_ACCESSOR_KEY) &&
+                            'min-w-20',
+                          CONNECTIONS_TABLE_ACCESSOR_KEY.Host ===
+                            (cell.column.id as CONNECTIONS_TABLE_ACCESSOR_KEY) &&
+                            'max-w-xs truncate',
+                          [
+                            CONNECTIONS_TABLE_ACCESSOR_KEY.Chains,
+                            CONNECTIONS_TABLE_ACCESSOR_KEY.Rule,
+                          ].includes(cell.column.id as CONNECTIONS_TABLE_ACCESSOR_KEY) &&
+                            'max-w-xl truncate',
+                        ),
+                    cell.column.getIsPinned && cell.column.getIsPinned() === 'left'
+                      ? 'pinned-td sticky left-0 z-20 bg-inherit'
+                      : '',
+                  ]"
+                  @contextmenu="handleCellRightClick($event, cell)"
+                >
+                  <template v-if="cell.column.getIsGrouped()">
+                    <template v-if="rows[virtualRow.index].getCanExpand()">
+                      <div class="flex items-center overflow-hidden">
+                        <component
+                          :is="
+                            rows[virtualRow.index].getIsExpanded()
+                              ? MagnifyingGlassMinusIcon
+                              : MagnifyingGlassPlusIcon
+                          "
+                          class="mr-1 inline-block h-4 w-4 shrink-0"
+                        />
+                        <FlexRender
+                          :render="cell.column.columnDef.cell"
+                          :props="cell.getContext()"
+                          class="shrink-1 overflow-hidden"
+                        />
+                        <span class="ml-1 shrink-0">
+                          ({{ rows[virtualRow.index].subRows.length }})
+                        </span>
+                      </div>
+                    </template>
+                  </template>
+                  <FlexRender
+                    v-else
+                    :render="
+                      cell.getIsAggregated()
+                        ? cell.column.columnDef.aggregatedCell
+                        : cell.column.columnDef.cell
+                    "
+                    :props="cell.getContext()"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>

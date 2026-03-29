@@ -125,9 +125,9 @@ export default defineComponent({
               ? policyGroups.value.length
               : type === PROXY_TAB_TYPE.DOMAIN
                 ? domainGroups.value.length
-              : type === PROXY_TAB_TYPE.NODE
-                ? nodeGroups.value.length
-                : proxyProviederList.value.length,
+                : type === PROXY_TAB_TYPE.NODE
+                  ? nodeGroups.value.length
+                  : proxyProviederList.value.length,
         }
       })
     })
@@ -164,26 +164,24 @@ export default defineComponent({
         </button>
       )
 
-      const modeSelect =
-        proxiesTabShow.value === PROXY_TAB_TYPE.POLICY &&
-        configs.value && (
-          <select
-            class={['select select-sm', isLargeCtrlsBar.value ? 'min-w-40' : 'min-w-24']}
-            v-model={configs.value.mode}
-            onChange={handlerModeChange}
-          >
-            {modeList.value.map((mode) => {
-              return (
-                <option
-                  key={mode}
-                  value={mode}
-                >
-                  {needTranslateModes.value ? t(mode.toLowerCase()) : mode}
-                </option>
-              )
-            })}
-          </select>
-        )
+      const modeSelect = proxiesTabShow.value === PROXY_TAB_TYPE.POLICY && configs.value && (
+        <select
+          class={['select select-sm', isLargeCtrlsBar.value ? 'min-w-40' : 'min-w-24']}
+          v-model={configs.value.mode}
+          onChange={handlerModeChange}
+        >
+          {modeList.value.map((mode) => {
+            return (
+              <option
+                key={mode}
+                value={mode}
+              >
+                {needTranslateModes.value ? t(mode.toLowerCase()) : mode}
+              </option>
+            )
+          })}
+        </select>
+      )
 
       const sort = (
         <select
@@ -243,11 +241,7 @@ export default defineComponent({
         />
       )
 
-      const searchSection = (
-        <div class="flex flex-1 items-center">
-          {searchInput}
-        </div>
-      )
+      const searchSection = <div class="flex flex-1 items-center">{searchInput}</div>
 
       const domainSearchInput = (
         <TextInput
@@ -362,10 +356,8 @@ export default defineComponent({
       if (proxiesTabShow.value === PROXY_TAB_TYPE.DOMAIN) {
         return (
           <div class="ctrls-bar">
-            <div class="proxy-domain-ctrls flex flex-col gap-2 p-2 md:flex-row md:items-center md:gap-3">
-              <div class="proxy-domain-tabs-row min-w-0 shrink-0">
-                {tabs}
-              </div>
+            <div class="proxy-domain-ctrls app-card-padding flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
+              <div class="proxy-domain-tabs-row min-w-0 shrink-0">{tabs}</div>
               <div class="proxy-domain-search-row flex w-full min-w-0 items-center gap-2 md:w-auto md:flex-1">
                 {domainSearchInput}
               </div>
@@ -375,7 +367,7 @@ export default defineComponent({
       }
 
       const content = !isLargeCtrlsBar.value ? (
-        <div class="flex flex-col gap-2 p-2">
+        <div class="app-card-padding flex flex-col gap-2">
           <div class="flex gap-2">
             {tabs}
             {upgradeAllIcon}
@@ -389,7 +381,7 @@ export default defineComponent({
           </div>
         </div>
       ) : (
-        <div class="flex gap-2 p-2">
+        <div class="app-card-padding flex gap-2">
           {tabs}
           {modeSelect}
           {searchSection}

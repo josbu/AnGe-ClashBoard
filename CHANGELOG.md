@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.72](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.71...v1.72) (2026-03-29)
+
+### Features
+
+* refresh the connections table container with rounded shell styling, cleaner sticky headers, and more stable scrolling behavior
+* redesign the settings menu into a horizontally scrollable action bar, keep section scrolling aligned to the measured menu height, and unify top toolbar spacing across settings, rules, proxies, logs, and overview pages
+
+### Bug Fixes
+
+* tighten connection page layout spacing so cards, filters, and virtualized tables align better across viewport sizes
+* refine proxy group and preview spacing to improve readability in dense policy lists
+
 ## [1.64](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.63...v1.64) (2026-03-23)
 
 ### Features

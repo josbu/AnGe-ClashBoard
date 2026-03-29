@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex size-full flex-col overflow-hidden"
+    class="relative flex size-full min-h-0 flex-col overflow-hidden"
     :style="!useConnectionCard && padding"
   >
     <template v-if="useConnectionCard">

@@ -126,7 +126,8 @@ export default defineComponent({
     const tabsWithNumbers = computed(() => {
       return Object.values(RULE_TAB_TYPE).map((type) => ({
         type,
-        count: type === RULE_TAB_TYPE.RULES ? rules.value.length : visibleRuleProviderList.value.length,
+        count:
+          type === RULE_TAB_TYPE.RULES ? rules.value.length : visibleRuleProviderList.value.length,
       }))
     })
 
@@ -151,7 +152,7 @@ export default defineComponent({
 
       const upgradeAllIcon = rulesTabShow.value === RULE_TAB_TYPE.PROVIDER && (
         <div class="flex shrink-0 items-center gap-2">
-          <div class="text-base-content/70 flex items-center justify-end text-sm tabular-nums whitespace-nowrap">
+          <div class="text-base-content/70 flex items-center justify-end text-sm whitespace-nowrap tabular-nums">
             {refreshSummaryText.value}
           </div>
           <button
@@ -161,7 +162,9 @@ export default defineComponent({
             <ArrowPathIcon
               class={[
                 'h-4 w-4',
-                (isRefreshingRules.value || isRuleRefreshRunning.value || isRuleCacheUpdating.value) &&
+                (isRefreshingRules.value ||
+                  isRuleRefreshRunning.value ||
+                  isRuleCacheUpdating.value) &&
                   'animate-spin',
               ]}
             />
@@ -221,11 +224,11 @@ export default defineComponent({
       )
 
       const content = !isLargeCtrlsBar.value ? (
-        <div class="flex flex-col gap-2 p-2">
+        <div class="app-card-padding flex flex-col gap-2">
           {showRuleTabs.value && (
             <div class="flex min-w-0 items-center gap-2">
               {tabs}
-              <div class="ml-auto shrink-0 flex items-center gap-2">
+              <div class="ml-auto flex shrink-0 items-center gap-2">
                 {rulesTabShow.value === RULE_TAB_TYPE.PROVIDER && (
                   <button
                     class="btn btn-circle btn-sm"
@@ -250,7 +253,7 @@ export default defineComponent({
             {searchInput}
             <div class="ml-auto shrink-0">
               {rulesTabShow.value === RULE_TAB_TYPE.PROVIDER && (
-                <div class="text-base-content/70 flex items-center justify-end text-sm tabular-nums whitespace-nowrap">
+                <div class="text-base-content/70 flex items-center justify-end text-sm whitespace-nowrap tabular-nums">
                   {refreshSummaryText.value}
                 </div>
               )}
@@ -258,7 +261,7 @@ export default defineComponent({
           </div>
         </div>
       ) : (
-        <div class="flex flex-wrap gap-2 p-2">
+        <div class="app-card-padding flex flex-wrap gap-2">
           {showRuleTabs.value && tabs}
           {searchInput}
           <div class="flex-1"></div>

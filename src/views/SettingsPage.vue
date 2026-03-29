@@ -147,6 +147,9 @@ const getItemRef = (key: SETTINGS_MENU_KEY) => {
 
 const isTriggerByClick = ref(false)
 const timeoutId = ref<number>()
+const getSettingsMenuOffset = () => {
+  return (menuComponentRef.value?.getMenuHeight?.() || 0) + 8
+}
 
 const handleMenuClick = (key: SETTINGS_MENU_KEY) => {
   activeMenuKey.value = key
@@ -163,7 +166,8 @@ const handleMenuClick = (key: SETTINGS_MENU_KEY) => {
       const containerRect = scrollContainerRef.value.getBoundingClientRect()
       const elementRect = element.getBoundingClientRect()
       const scrollTop = scrollContainerRef.value.scrollTop
-      const targetScrollTop = scrollTop + elementRect.top - containerRect.top - 86
+      const targetScrollTop =
+        scrollTop + elementRect.top - containerRect.top - getSettingsMenuOffset()
 
       scrollContainerRef.value.scrollTo({
         top: targetScrollTop,

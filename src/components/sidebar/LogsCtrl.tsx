@@ -163,10 +163,7 @@ export default defineComponent({
 
       const logTypeSelect = (
         <select
-          class={[
-            'select select-sm',
-            isLargeCtrlsBar.value ? 'w-40' : 'w-24 max-w-40 flex-1',
-          ]}
+          class={['select select-sm', isLargeCtrlsBar.value ? 'w-40' : 'w-24 max-w-40 flex-1']}
           v-model={logTypeFilter.value}
         >
           <option value="">{t('all')}</option>
@@ -287,7 +284,7 @@ export default defineComponent({
       )
 
       const content = !isLargeCtrlsBar.value ? (
-        <div class="flex flex-col gap-2 p-2">
+        <div class="app-card-padding flex flex-col gap-2">
           <div class="flex w-full justify-between gap-2">
             <div class="join flex-1">{levelSelect}</div>
             {buttons}
@@ -298,7 +295,7 @@ export default defineComponent({
           </div>
         </div>
       ) : (
-        <div class="flex items-center justify-between gap-2 p-2">
+        <div class="app-card-padding flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
             {levelSelect}
             <div class="flex w-96 items-center gap-2">

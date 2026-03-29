@@ -1,6 +1,6 @@
 {
   "name": "ange-clashboard",
-  "version": "1.71",
+  "version": "1.72",
   "description": "AnGe-ClashBoard - A dashboard for Clash API, Mihomo and sing-box",
   "license": "MIT",
   "type": "module",
@@ -14,8 +14,8 @@
     "build:sarasa-only": "vite build --mode SarasaUi",
     "dev": "vite",
     "dev:client": "vite",
-    "dev:server": "node server/index.mjs",
     "dev:full": "concurrently \"corepack pnpm run dev:server\" \"corepack pnpm run dev:client\"",
+    "dev:server": "node server/index.mjs",
     "dev:up": "powershell -ExecutionPolicy Bypass -File scripts/dev-up.ps1",
     "format": "prettier --write src/",
     "lint": "eslint . --fix",
