@@ -5,7 +5,7 @@
   </template>
   <div
     v-if="hasVisibleItems"
-    class="flex flex-col gap-2 p-4 text-sm"
+    class="settings-section flex flex-col gap-2 p-4 text-sm"
   >
     <div class="settings-title">
       {{ $t('overviewSettings') }}

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.76](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.75...v1.76) (2026-03-29)
+
+### Bug Fixes
+
+* tighten the shared spacing rhythm in settings cards so desktop and mobile section headers sit closer to their surrounding content
+* move the mobile icon-settings title, custom-icon label, and expand action onto one line while keeping the strategy, node, and other tabs compact underneath
+
 ## [1.75](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.74...v1.75) (2026-03-29)
 
 ### Bug Fixes

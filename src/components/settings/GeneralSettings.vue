@@ -3,7 +3,7 @@
   <!-- dashboard -->
   <div
     v-if="hasVisibleGeneralItems"
-    class="p-4 text-sm"
+    class="settings-section p-4 text-sm"
   >
     <div class="settings-title">
       {{ $t('general') }}

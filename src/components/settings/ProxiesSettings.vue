@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-2 p-4 text-sm">
+  <div class="settings-section flex flex-col gap-2 p-4 text-sm">
     <template v-if="hasVisibleLatencyItems">
       <div class="settings-title">
         {{ $t('latency') }}
@@ -268,9 +268,6 @@
       </div>
     </template>
     <template v-if="isVisibleIconSettings">
-      <div class="settings-title">
-        {{ $t('icon') }}
-      </div>
       <IconSettings />
     </template>
   </div>

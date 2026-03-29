@@ -2,7 +2,7 @@
   <!-- dashboard -->
   <div
     v-if="hasVisibleItems"
-    class="relative flex flex-col gap-2 p-4 text-sm"
+    class="settings-section relative flex flex-col gap-2 p-4 text-sm"
   >
     <div class="settings-title">
       <div class="indicator">

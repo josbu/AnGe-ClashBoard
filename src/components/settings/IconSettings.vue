@@ -1,26 +1,31 @@
 <template>
-  <div class="flex items-end justify-between gap-3">
-    <div class="flex items-center gap-2">
-      {{ $t('customIcon') }}
-      <template v-if="iconReflectList.length"> ({{ iconReflectList.length }}) </template>
-      <button
-        v-if="iconReflectList.length"
-        class="btn btn-sm btn-circle"
-        @click="dialogVisible = !dialogVisible"
-      >
-        <ChevronUpIcon
-          v-if="dialogVisible"
-          class="h-4 w-4"
-        />
-        <ChevronDownIcon
-          v-else
-          class="h-4 w-4"
-        />
-      </button>
+  <div class="icon-settings-shell flex flex-col gap-3">
+    <div class="icon-settings-header flex items-center justify-between gap-3">
+      <div class="settings-title py-0">
+        {{ $t('icon') }}
+      </div>
+      <div class="icon-settings-trigger flex items-center gap-2">
+        {{ $t('customIcon') }}
+        <template v-if="iconReflectList.length"> ({{ iconReflectList.length }}) </template>
+        <button
+          v-if="iconReflectList.length"
+          class="btn btn-sm btn-circle"
+          @click="dialogVisible = !dialogVisible"
+        >
+          <ChevronUpIcon
+            v-if="dialogVisible"
+            class="h-4 w-4"
+          />
+          <ChevronDownIcon
+            v-else
+            class="h-4 w-4"
+          />
+        </button>
+      </div>
     </div>
     <div
       v-if="dialogVisible && iconReflectList.length"
-      class="tabs tabs-box bg-base-200 inline-grid h-10 grid-cols-3 p-1"
+      class="icon-settings-tabs tabs tabs-box bg-base-200 inline-grid h-10 grid-cols-3 p-1"
     >
       <button
         class="tab h-8 min-h-8"

@@ -258,6 +258,27 @@ html.apple-mobile-ui {
     padding-inline: 0.875rem !important;
   }
 
+  #app-content .icon-settings-toolbar {
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  #app-content .icon-settings-trigger {
+    justify-content: space-between;
+  }
+
+  #app-content .icon-settings-tabs {
+    margin-left: auto;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  #app-content .icon-settings-tabs .tab {
+    min-width: 0 !important;
+    padding-inline: 0.5rem !important;
+    white-space: nowrap;
+  }
+
   #app-content .proxy-main-tabs {
     gap: 0.125rem;
     padding: 0.25rem !important;
@@ -579,13 +600,17 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 .settings-title {
-  @apply flex items-center gap-2 py-2 text-lg font-bold;
+  @apply flex items-center gap-2 pb-2 text-lg font-bold;
 }
 .settings-grid {
   @apply grid max-w-7xl grid-cols-1 gap-x-4 gap-y-1 lg:grid-cols-2 lg:gap-x-8 xl:gap-x-12 2xl:gap-x-16;
 }
 .sidebar-collapsed .settings-grid {
   @apply md:grid-cols-2;
+}
+
+.settings-section {
+  padding-top: 0.75rem !important;
 }
 
 .settings-menu-item {
