@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-full min-h-0 flex-col gap-3 overflow-hidden">
     <div
-      class="border-base-300/60 bg-base-100 rounded-box flex min-h-0 flex-1 flex-col overflow-hidden border p-3 md:p-4"
+      class="border-base-300/60 bg-base-100 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border p-3 md:p-4"
     >
       <div class="relative z-30 shrink-0 pb-3">
         <div class="flex min-w-0 flex-col gap-2 md:flex-row md:items-center md:gap-3">
@@ -99,7 +99,7 @@
       </div>
 
       <div
-        class="border-base-300/60 bg-base-100 rounded-box flex min-h-0 flex-1 flex-col overflow-hidden border backdrop-blur-none"
+        class="border-base-300/60 bg-base-100 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border backdrop-blur-none"
       >
         <div
           v-if="cacheHintText"
