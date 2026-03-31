@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.81](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.80...v1.81) (2026-03-31)
+
+### Bug Fixes
+
+* refine the connections table layout by restoring reliable header/body alignment, tightening the compact column spacing, keeping grouped type and source-IP labels readable, restoring the header divider, and returning the close icon size to the expected appearance
+
 ## [1.80](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.79...v1.80) (2026-03-31)
 
 ### Features

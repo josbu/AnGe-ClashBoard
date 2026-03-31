@@ -1,104 +1,102 @@
 <template>
   <div class="app-card-padding flex min-h-0 flex-1">
-    <div
-      class="connection-table-shell border-base-300/60 bg-base-100 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border"
-    >
-      <div class="connection-table-header border-base-300/60 bg-base-100 overflow-hidden border-b">
-        <table
-          :class="sharedTableClass"
-          :style="headerTableStyle"
-        >
-          <thead class="bg-base-100 z-20">
-            <tr
-              v-for="headerGroup in tanstackTable.getHeaderGroups()"
-              :key="headerGroup.id"
-            >
-              <th
-                v-for="header in headerGroup.headers"
-                :key="header.id"
-                :colSpan="header.colSpan"
-                class="bg-base-100 relative"
-                :class="[
-                  header.column.getCanSort() ? 'cursor-pointer select-none' : '',
-                  header.column.getIsPinned && header.column.getIsPinned() === 'left'
-                    ? 'pinned-td sticky left-0 z-30'
-                    : 'z-20',
-                ]"
-                :style="getColumnStyle(header.getSize())"
-                @click="header.column.getToggleSortingHandler()?.($event)"
-              >
-                <div class="flex items-center gap-1">
-                  <FlexRender
-                    v-if="!header.isPlaceholder"
-                    :render="header.column.columnDef.header"
-                    :props="header.getContext()"
-                  >
-                  </FlexRender>
-                  <ArrowUpCircleIcon
-                    class="h-4 w-4"
-                    v-if="header.column.getIsSorted() === 'asc'"
-                  />
-                  <ArrowDownCircleIcon
-                    class="h-4 w-4"
-                    v-if="header.column.getIsSorted() === 'desc'"
-                  />
-                  <div>
-                    <button
-                      v-if="header.column.getCanGroup()"
-                      class="btn btn-xs btn-circle btn-ghost"
-                      @click.stop="() => header.column.getToggleGroupingHandler()()"
-                    >
-                      <MagnifyingGlassMinusIcon
-                        v-if="header.column.getIsGrouped()"
-                        class="h-4 w-4"
-                      />
-                      <MagnifyingGlassPlusIcon
-                        v-else
-                        class="h-4 w-4"
-                      />
-                    </button>
-                    <button
-                      v-if="
-                        header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.Host ||
-                        header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.SniffHost
-                      "
-                      class="btn btn-xs btn-circle btn-ghost"
-                      @click.stop="() => handlePinColumn(header.column)"
-                    >
-                      <MapPinIcon
-                        v-if="header.column.getIsPinned() !== 'left'"
-                        class="h-4 w-4"
-                      />
-                      <XMarkIcon
-                        v-else
-                        class="h-4 w-4"
-                      />
-                    </button>
-                  </div>
-                </div>
-                <div
-                  v-if="isManualTable"
-                  @dblclick="() => header.column.resetSize()"
-                  @click.stop
-                  @mousedown.stop="(e) => header.getResizeHandler()(e)"
-                  @touchstart.stop="(e) => header.getResizeHandler()(e)"
-                  class="resizer bg-neutral absolute top-0 right-0 h-full w-1 cursor-ew-resize"
-                />
-              </th>
-            </tr>
-          </thead>
-        </table>
-      </div>
+    <div class="connection-table-shell border-base-300/60 bg-base-100 flex min-h-0 flex-1 overflow-hidden rounded-lg border">
       <div
         ref="parentRef"
         class="connection-table-scroll min-h-0 flex-1 overflow-auto overscroll-contain"
-        @scroll.passive="handleTableScroll"
       >
         <div :style="{ height: `${totalSize}px` }">
           <table
-            :class="[sharedTableClass, 'select-text']"
-            :style="bodyTableStyle"
+            :class="sharedTableClass"
+            :style="tableStyle"
           >
+            <colgroup>
+              <col
+                v-for="column in tanstackTable.getVisibleLeafColumns()"
+                :key="column.id"
+                :style="getColumnStyle(column.id, column.getSize())"
+              >
+            </colgroup>
+            <thead class="bg-base-100 sticky top-0 z-10">
+              <tr
+                v-for="headerGroup in tanstackTable.getHeaderGroups()"
+                :key="headerGroup.id"
+              >
+                <th
+                  v-for="header in headerGroup.headers"
+                  :key="header.id"
+                  :colSpan="header.colSpan"
+                  class="relative"
+                  :class="[
+                    header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+                    header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.Close ? 'px-1' : '',
+                    header.column.getIsPinned && header.column.getIsPinned() === 'left'
+                      ? 'pinned-td bg-base-100 sticky left-0 z-20'
+                      : '',
+                  ]"
+                  :style="getColumnStyle(header.column.id, header.getSize())"
+                  @click="header.column.getToggleSortingHandler()?.($event)"
+                >
+                  <div class="flex items-center gap-1">
+                    <FlexRender
+                      v-if="!header.isPlaceholder"
+                      :render="header.column.columnDef.header"
+                      :props="header.getContext()"
+                    >
+                    </FlexRender>
+                    <ArrowUpCircleIcon
+                      class="h-4 w-4"
+                      v-if="header.column.getIsSorted() === 'asc'"
+                    />
+                    <ArrowDownCircleIcon
+                      class="h-4 w-4"
+                      v-if="header.column.getIsSorted() === 'desc'"
+                    />
+                    <div>
+                      <button
+                        v-if="header.column.getCanGroup()"
+                        class="btn btn-xs btn-circle btn-ghost"
+                        @click.stop="() => header.column.getToggleGroupingHandler()()"
+                      >
+                        <MagnifyingGlassMinusIcon
+                          v-if="header.column.getIsGrouped()"
+                          class="h-4 w-4"
+                        />
+                        <MagnifyingGlassPlusIcon
+                          v-else
+                          class="h-4 w-4"
+                        />
+                      </button>
+                      <button
+                        v-if="
+                          header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.Host ||
+                          header.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.SniffHost
+                        "
+                        class="btn btn-xs btn-circle btn-ghost"
+                        @click.stop="() => handlePinColumn(header.column)"
+                      >
+                        <MapPinIcon
+                          v-if="header.column.getIsPinned() !== 'left'"
+                          class="h-4 w-4"
+                        />
+                        <XMarkIcon
+                          v-else
+                          class="h-4 w-4"
+                        />
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    v-if="isManualTable"
+                    @dblclick="() => header.column.resetSize()"
+                    @click.stop
+                    @mousedown.stop="(e) => header.getResizeHandler()(e)"
+                    @touchstart.stop="(e) => header.getResizeHandler()(e)"
+                    class="resizer bg-neutral absolute top-0 right-0 h-full w-1 cursor-ew-resize"
+                  />
+                </th>
+              </tr>
+            </thead>
             <tbody>
               <tr
                 v-for="(virtualRow, index) in virtualRows"
@@ -117,7 +115,10 @@
                 <td
                   v-for="cell in rows[virtualRow.index].getVisibleCells()"
                   :key="cell.id"
-                    :class="[
+                  :class="[
+                    cell.column.id === CONNECTIONS_TABLE_ACCESSOR_KEY.Close
+                      ? 'px-1'
+                      : '',
                     isManualTable
                       ? 'truncate text-sm select-text cursor-pointer'
                       : twMerge(
@@ -142,7 +143,7 @@
                       ? 'pinned-td sticky left-0 z-20 bg-inherit'
                       : '',
                   ]"
-                  :style="getColumnStyle(cell.column.getSize())"
+                  :style="getColumnStyle(cell.column.id, cell.column.getSize())"
                   @contextmenu="handleCellRightClick($event, cell)"
                 >
                   <template v-if="cell.column.getIsGrouped()">
@@ -243,7 +244,7 @@ import {
   type SortingState,
 } from '@tanstack/vue-table'
 import { useVirtualizer } from '@tanstack/vue-virtual'
-import { useElementSize, useStorage } from '@vueuse/core'
+import { useStorage } from '@vueuse/core'
 import dayjs from 'dayjs'
 import { twMerge } from 'tailwind-merge'
 import { computed, h, ref, type VNode } from 'vue'
@@ -268,6 +269,15 @@ const columnWidthMap = useStorage('config/table-column-width', {
   [CONNECTIONS_TABLE_ACCESSOR_KEY.Destination]: 150,
   [CONNECTIONS_TABLE_ACCESSOR_KEY.ConnectTime]: 100,
 } as Record<CONNECTIONS_TABLE_ACCESSOR_KEY, number>)
+const AUTO_COLUMN_WIDTH_MAP: Partial<Record<CONNECTIONS_TABLE_ACCESSOR_KEY, number>> = {
+  [CONNECTIONS_TABLE_ACCESSOR_KEY.Close]: 56,
+  [CONNECTIONS_TABLE_ACCESSOR_KEY.Type]: 88,
+  [CONNECTIONS_TABLE_ACCESSOR_KEY.SourceIP]: 112,
+}
+const GROUPED_COLUMN_WIDTH_MAP: Partial<Record<CONNECTIONS_TABLE_ACCESSOR_KEY, number>> = {
+  [CONNECTIONS_TABLE_ACCESSOR_KEY.Type]: 140,
+  [CONNECTIONS_TABLE_ACCESSOR_KEY.SourceIP]: 156,
+}
 
 const isManualTable = computed(() => tableWidthMode.value === TABLE_WIDTH_MODE.MANUAL)
 const { t } = useI18n()
@@ -314,7 +324,10 @@ const columns: ColumnDef<Connection>[] = [
           ],
         )
 
-        return h('div', { class: 'flex gap-1' }, [closeButton, degradeButton])
+        return h('div', { class: 'flex items-center justify-center gap-0.5' }, [
+          closeButton,
+          degradeButton,
+        ])
       }
 
       return closeButton
@@ -568,8 +581,6 @@ const rows = computed(() => {
 })
 
 const parentRef = ref<HTMLElement | null>(null)
-const { width: scrollViewportWidth } = useElementSize(parentRef)
-const scrollLeft = ref(0)
 const rowVirtualizerOptions = computed(() => {
   return {
     count: rows.value.length,
@@ -585,25 +596,36 @@ const totalSize = computed(() => rowVirtualizer.value.getTotalSize() + 24)
 const sharedTableClass = computed(() => {
   return ['table table-fixed rounded-none', sizeOfTable.value]
 })
+const getEffectiveColumnWidth = (columnId: string, width: number) => {
+  const accessorKey = columnId as CONNECTIONS_TABLE_ACCESSOR_KEY
+
+  if (grouping.value.includes(accessorKey)) {
+    return GROUPED_COLUMN_WIDTH_MAP[accessorKey] ?? width
+  }
+
+  if (!isManualTable.value) {
+    return AUTO_COLUMN_WIDTH_MAP[accessorKey] ?? width
+  }
+
+  return width
+}
 const resolvedTableWidth = computed(() => {
-  return Math.max(scrollViewportWidth.value || 0, tanstackTable.getCenterTotalSize())
+  return tanstackTable
+    .getVisibleLeafColumns()
+    .reduce((total, column) => total + getEffectiveColumnWidth(column.id, column.getSize()), 0)
 })
-const headerTableStyle = computed(() => {
-  return {
-    width: `${resolvedTableWidth.value}px`,
-    transform: `translateX(-${scrollLeft.value}px)`,
-  }
-})
-const bodyTableStyle = computed(() => {
+const tableStyle = computed(() => {
   return {
     width: `${resolvedTableWidth.value}px`,
   }
 })
-const getColumnStyle = (width: number) => {
+const getColumnStyle = (columnId: string, width: number) => {
+  const effectiveWidth = getEffectiveColumnWidth(columnId, width)
+
   return {
-    width: `${width}px`,
-    minWidth: `${width}px`,
-    maxWidth: `${width}px`,
+    width: `${effectiveWidth}px`,
+    minWidth: `${effectiveWidth}px`,
+    maxWidth: `${effectiveWidth}px`,
   }
 }
 
@@ -647,10 +669,6 @@ const handlePinColumn = (column: Column<Connection, unknown>) => {
     })
     column.pin('left')
   }
-}
-
-const handleTableScroll = () => {
-  scrollLeft.value = parentRef.value?.scrollLeft || 0
 }
 
 // 复制功能
@@ -702,5 +720,19 @@ th .resizer {
 }
 th:hover .resizer {
   @apply opacity-100;
+}
+
+.connection-table-shell th,
+.connection-table-shell td {
+  padding-inline: 0.5rem;
+}
+
+.connection-table-shell thead th {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-base-300) 60%, transparent) !important;
+}
+
+.connection-table-shell thead th:first-child,
+.connection-table-shell tbody td:first-child {
+  padding-left: 0.75rem !important;
 }
 </style>
