@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.82](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.81...v1.82) (2026-03-31)
+
+### Bug Fixes
+
+* refine the icon-settings custom icon section by restoring the original visual style, enlarging the effective click target without changing the overall look, removing duplicate collapse arrows, tightening tab height and font weight, and aligning the expand/collapse control size and hover feedback with the surrounding action buttons
+
 ## [1.81](https://github.com/liandu2024/AnGe-ClashBoard/compare/v1.80...v1.81) (2026-03-31)
 
 ### Bug Fixes
