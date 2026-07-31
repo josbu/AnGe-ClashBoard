@@ -729,6 +729,23 @@ div::-webkit-scrollbar-thumb:hover {
   padding: var(--app-space, 0.5rem) !important;
 }
 
+/* Page-level spacing: outer padding of a view's scrollable content and the
+   gap between its top-level cards. Keep every page on these utilities so the
+   page margins stay globally aligned (--app-space is for card-inner spacing).
+   No !important: views may extend the padding inline (e.g. mobile dock/toolbar
+   clearance from usePaddingForViews). */
+.app-page-padding {
+  padding: var(--app-page-space, 0.5rem);
+}
+
+.app-page-gap {
+  gap: var(--app-page-space, 0.5rem);
+}
+
+.app-page-margin {
+  margin: var(--app-page-space, 0.5rem);
+}
+
 .app-inline-gap {
   gap: var(--app-space, 0.5rem) !important;
 }
